@@ -1,24 +1,27 @@
 import Button from '@mui/material/Button';
-import { AccessAlarm, ThreeDRotation, Home } from '@mui/icons-material';
-import { pink } from '@mui/material/colors';
+import AccessAlarm from '@mui/icons-material/AccessAlarm';
+import ThreeDRotation from '@mui/icons-material/ThreeDRotation';
+import Typography from '@mui/material/Typography';
 
 function App() {
   return (
     <>
       <div>Manh Tien Dev</div>
+
+      <div>
+        <Typography variant='body2' color='text.secondary'>
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa nihil
+          ad magnam dolore architecto, consequuntur dicta pariatur. Voluptate
+          ipsam aliquam magni quam error quibusdam aperiam saepe nulla,
+          consequatur doloremque quae.
+        </Typography>
+      </div>
       <Button variant='text'>Text</Button>
       <Button variant='contained'>Contained</Button>
       <Button variant='outlined'>Outlined</Button>
       <br />
       <AccessAlarm></AccessAlarm>
       <ThreeDRotation></ThreeDRotation>
-      <Home />
-      <Home color='primary' />
-      <Home color='secondary' />
-      <Home color='success' />
-      <Home color='action' />
-      <Home color='disabled' />
-      <Home sx={{ color: pink[500] }} />
     </>
   );
 }
