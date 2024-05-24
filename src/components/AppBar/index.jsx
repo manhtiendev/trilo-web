@@ -28,7 +28,7 @@ function AppBar() {
         justifyContent: 'space-between',
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
         <AppsIcon sx={{ color: 'primary.main', fontSize: '20px' }} />
         <Box
           sx={{
@@ -70,13 +70,13 @@ function AppBar() {
           size='small'
         />
         <ModeSelect></ModeSelect>
-        <Tooltip title='Notification'>
+        <Tooltip title='Notifications'>
           <Badge color='secondary' variant='dot' sx={{ cursor: 'pointer' }}>
-            <NotificationsNoneIcon />
+            <NotificationsNoneIcon sx={{ color: 'primary.main' }} />
           </Badge>
         </Tooltip>
         <Tooltip title='Information'>
-          <HelpOutlineIcon sx={{ cursor: 'pointer' }} />
+          <HelpOutlineIcon sx={{ cursor: 'pointer', color: 'primary.main' }} />
         </Tooltip>
         <Profiles />
       </Box>
