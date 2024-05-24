@@ -15,11 +15,11 @@ import Badge from '@mui/material/Badge';
 import Tooltip from '@mui/material/Tooltip';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import Profiles from './Menus/Profiles';
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 
 function AppBar() {
   return (
     <Box
-      px={2}
       sx={{
         width: '100%',
         height: (theme) => theme.custom.appBarHeight,
@@ -28,15 +28,20 @@ function AppBar() {
         justifyContent: 'space-between',
         gap: 2,
         overflowX: 'auto',
+        px: 2,
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-        <AppsIcon sx={{ color: 'primary.main', fontSize: '20px' }} />
+        <AppsIcon
+          sx={{ color: 'primary.main', fontSize: '20px', cursor: 'pointer' }}
+        />
         <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
             gap: 0.5,
+            cursor: 'pointer',
+            userSelect: 'none',
           }}
         >
           <SvgIcon
@@ -63,7 +68,9 @@ function AppBar() {
           <Recent />
           <Starred />
           <Templates />
-          <Button variant='outlined'>Create</Button>
+          <Button startIcon={<LibraryAddIcon />} variant='outlined'>
+            Create
+          </Button>
         </Box>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
