@@ -33,7 +33,7 @@ export default function Profiles() {
           aria-expanded={open ? 'true' : undefined}
         >
           <Avatar
-            sx={{ width: 32, height: 32 }}
+            sx={{ width: 34, height: 34 }}
             src='https://i.ibb.co/PjCWvwT/t-i-xu-ng.jpg'
             alt='ManhTien'
           />
