@@ -26,6 +26,8 @@ function AppBar() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
+        gap: 2,
+        overflowX: 'auto',
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
@@ -56,11 +58,13 @@ function AppBar() {
             Trilo
           </Typography>
         </Box>
-        <Workspaces />
-        <Recent />
-        <Starred />
-        <Templates />
-        <Button variant='outlined'>Create</Button>
+        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
+          <Workspaces />
+          <Recent />
+          <Starred />
+          <Templates />
+          <Button variant='outlined'>Create</Button>
+        </Box>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
         <TextField
@@ -68,6 +72,7 @@ function AppBar() {
           label='Search...'
           type='search'
           size='small'
+          sx={{ minWidth: 120 }}
         />
         <ModeSelect></ModeSelect>
         <Tooltip title='Notifications'>
