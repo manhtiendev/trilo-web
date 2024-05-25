@@ -20,6 +20,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
+import logo from '~/assets/trilo.gif';
 
 function AppBar() {
   const [searchValue, setSearchValue] = useState('');
@@ -64,7 +65,16 @@ function AppBar() {
             cursor: 'pointer',
             userSelect: 'none',
             color: 'white',
-            '&:hover': { bgcolor: 'primary.main' },
+            '& img': { display: 'none' },
+            '&:hover': {
+              bgcolor: 'primary.main',
+              '& .IconAnimation': {
+                display: 'block',
+              },
+              '& .MuiSvgIcon-root': {
+                display: 'none',
+              },
+            },
             padding: '4px',
             borderRadius: '4px',
           }}
@@ -74,8 +84,16 @@ function AppBar() {
             inheritViewBox
             sx={{
               color: 'white',
+              fontSize: '20px',
             }}
-            fontSize='small'
+          />
+          <img
+            className='IconAnimation'
+            style={{ borderRadius: '4px' }}
+            src={logo}
+            alt='IconApp'
+            width='20px'
+            height='20px'
           />
           <Typography
             sx={{
