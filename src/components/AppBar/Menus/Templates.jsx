@@ -22,7 +22,7 @@ export default function Templates() {
   return (
     <Box>
       <Button
-        sx={{ color: 'white', '&:hover': { color: '#bdc3c7' } }}
+        sx={{ color: 'white', '&:hover': { bgcolor: 'primary.main' } }}
         id='basic-button-templates'
         aria-controls={open ? 'basic-menu-templates' : undefined}
         aria-haspopup='true'

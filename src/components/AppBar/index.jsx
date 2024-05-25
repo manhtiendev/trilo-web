@@ -39,14 +39,23 @@ function AppBar() {
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-        <AppsIcon
+        <Box
           sx={{
-            color: 'white',
-            fontSize: '20px',
-            cursor: 'pointer',
-            '&:hover': { color: '#bdc3c7' },
+            borderRadius: '4px',
+            padding: '6px 4px',
+            '&:hover': { bgcolor: 'primary.main' },
+            display: 'flex',
+            alignItems: 'center',
           }}
-        />
+        >
+          <AppsIcon
+            sx={{
+              color: 'white',
+              fontSize: '20px',
+              cursor: 'pointer',
+            }}
+          />
+        </Box>
         <Box
           sx={{
             display: 'flex',
@@ -54,6 +63,10 @@ function AppBar() {
             gap: 0.5,
             cursor: 'pointer',
             userSelect: 'none',
+            color: 'white',
+            '&:hover': { bgcolor: 'primary.main' },
+            padding: '4px',
+            borderRadius: '4px',
           }}
         >
           <SvgIcon
@@ -81,7 +94,7 @@ function AppBar() {
           <Starred />
           <Templates />
           <Button
-            sx={{ color: 'white', '&:hover': { color: '#bdc3c7' } }}
+            sx={{ color: 'white', '&:hover': { bgcolor: 'primary.main' } }}
             startIcon={<LibraryAddIcon />}
           >
             Create

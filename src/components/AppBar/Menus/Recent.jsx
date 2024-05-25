@@ -22,7 +22,7 @@ export default function Recent() {
   return (
     <Box>
       <Button
-        sx={{ color: 'white', '&:hover': { color: '#bdc3c7' } }}
+        sx={{ color: 'white', '&:hover': { bgcolor: 'primary.main' } }}
         id='basic-button-recent'
         aria-controls={open ? 'basic-menu-recent' : undefined}
         aria-haspopup='true'
