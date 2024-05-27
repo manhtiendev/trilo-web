@@ -18,5 +18,6 @@ module.exports = {
         patterns: ['@mui/*/*/*'],
       },
     ],
+    'no-console': 1,
   },
 };
