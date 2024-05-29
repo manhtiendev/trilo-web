@@ -9,16 +9,51 @@ import {
   TouchSensor,
   useSensor,
   useSensors,
+  DragOverlay,
+  defaultDropAnimationSideEffects,
 } from '@dnd-kit/core';
 import { arrayMove } from '~/utils/arrayMove';
+import Column from './ListColumns/Column/Column';
+import Card from './ListColumns/Column/ListCards/Card/Card';
 // import { arrayMove } from '@dnd-kit/sortable';
+
+const ACTIVE_DRAG_ITEM_TYPE = {
+  COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
+  CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD',
+};
 
 export default function BoardContent({ board }) {
   const [orderedColumns, setorderedColumns] = useState([]);
 
+  const [activeDragItemId, setActiveDragItemId] = useState(null);
+  const [activeDragItemType, setActiveDragItemType] = useState(null);
+  const [activeDragItemData, setActiveDragItemData] = useState(null);
+
   useEffect(() => {
     setorderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'));
   }, [board]);
+
+  //Fix drop column animation
+  const dropAnimation = {
+    sideEffects: defaultDropAnimationSideEffects({
+      styles: {
+        active: {
+          opacity: 0.5,
+        },
+      },
+    }),
+  };
+
+  const handleDragStart = (e) => {
+    // console.log('handleDragStart',e);
+    setActiveDragItemId(e?.active?.id);
+    setActiveDragItemType(
+      e?.active?.data?.current?.columnId
+        ? ACTIVE_DRAG_ITEM_TYPE.CARD
+        : ACTIVE_DRAG_ITEM_TYPE.COLUMN
+    );
+    setActiveDragItemData(e?.active?.data?.current);
+  };
 
   const handleDragEnd = (e) => {
     const { active, over } = e;
@@ -31,11 +66,15 @@ export default function BoardContent({ board }) {
 
       setorderedColumns(arrayMove(orderedColumns, oldIndex, newIndex));
     }
+
+    setActiveDragItemId(null);
+    setActiveDragItemType(null);
+    setActiveDragItemData(null);
   };
 
   // Sensor
 
-  // If using the default PointerSensor,
+  //** If using the default PointerSensor,
   // must incorporate CSS touch-action: 'none' in the drag and drop element(Columns)
 
   // const pointerSensor = useSensor(PointerSensor, {
@@ -47,7 +86,7 @@ export default function BoardContent({ board }) {
 
   // const sensors = useSensors(pointerSensor);
 
-  //PointerSensor bug on mobile, use MouseSensor & TouchSensor
+  //** PointerSensor bug on mobile, use MouseSensor & TouchSensor
 
   const mouseSensor = useSensor(MouseSensor, {
     // Require the mouse to move by 10 pixels before activating
@@ -65,7 +104,11 @@ export default function BoardContent({ board }) {
   const sensors = useSensors(mouseSensor, touchSensor);
 
   return (
-    <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
+    <DndContext
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      sensors={sensors}
+    >
       <Box
         sx={{
           bgcolor: (theme) =>
@@ -76,6 +119,15 @@ export default function BoardContent({ board }) {
         }}
       >
         <ListColumns columns={orderedColumns} />
+        <DragOverlay dropAnimation={dropAnimation}>
+          {!activeDragItemType && null}
+          {activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && (
+            <Column column={activeDragItemData}></Column>
+          )}
+          {activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD && (
+            <Card card={activeDragItemData}></Card>
+          )}
+        </DragOverlay>
       </Box>
     </DndContext>
   );
