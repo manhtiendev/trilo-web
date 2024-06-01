@@ -12,22 +12,14 @@ import { CSS } from '@dnd-kit/utilities';
 
 function Card({ card }) {
   const shouldShowCardActions = () => {
-    return (
-      !!card?.memberIds?.length ||
-      !!card?.comments?.length ||
-      !!card?.attachments?.length
-    );
+    return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length;
   };
 
   // Dnd
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: card._id, data: { ...card } });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: card._id,
+    data: { ...card },
+  });
 
   const dndKitCardStyles = {
     // touchAction: 'none',
