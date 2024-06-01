@@ -11,6 +11,7 @@ import {
   useSensors,
   DragOverlay,
   defaultDropAnimationSideEffects,
+  closestCorners,
 } from '@dnd-kit/core';
 import { arrayMove } from '~/utils/arrayMove';
 import Column from './ListColumns/Column/Column';
@@ -172,6 +173,7 @@ export default function BoardContent({ board }) {
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
       sensors={sensors}
+      collisionDetection={closestCorners}
     >
       <Box
         sx={{
