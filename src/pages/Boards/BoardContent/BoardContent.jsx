@@ -93,8 +93,10 @@ export default function BoardContent({ board }) {
         const nextOverColumn = nextColumns.find((col) => col._id === overColumn._id);
 
         if (nextActiveColumn) {
-          nextActiveColumn.cards.filter((card) => card._id !== activeDraggingCardId);
-          nextActiveColumn.cardOderIds = nextActiveColumn.cards.map((card) => card._id);
+          nextActiveColumn.cards = nextActiveColumn.cards.filter(
+            (card) => card._id !== activeDraggingCardId
+          );
+          nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map((card) => card._id);
         }
 
         if (nextOverColumn) {
@@ -106,7 +108,7 @@ export default function BoardContent({ board }) {
             0,
             activeDraggingCardData
           );
-          nextOverColumn.cardOderIds = nextOverColumn.cards.map((card) => card._id);
+          nextOverColumn.cardOrderIds = nextOverColumn.cards.map((card) => card._id);
         }
 
         return nextColumns;
