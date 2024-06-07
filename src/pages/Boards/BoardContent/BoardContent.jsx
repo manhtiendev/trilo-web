@@ -18,7 +18,8 @@ import {
 import { arrayMove } from '~/utils/arrayMove';
 import Column from './ListColumns/Column/Column';
 import Card from './ListColumns/Column/ListCards/Card/Card';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
+import { generatePlaceholderCard } from '~/utils/formatters';
 // import { arrayMove } from '@dnd-kit/sortable';
 
 const ACTIVE_DRAG_ITEM_TYPE = {
@@ -83,6 +84,11 @@ export default function BoardContent({ board }) {
         nextActiveColumn.cards = nextActiveColumn.cards.filter(
           (card) => card._id !== activeDraggingCardId
         );
+
+        if (isEmpty(nextActiveColumn.cards)) {
+          nextActiveColumn.cards = [generatePlaceholderCard(nextActiveColumn)];
+        }
+
         nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map((card) => card._id);
       }
 
@@ -90,10 +96,14 @@ export default function BoardContent({ board }) {
         nextOverColumn.cards = nextOverColumn.cards.filter(
           (card) => card._id !== activeDraggingCardId
         );
+
         nextOverColumn.cards = nextOverColumn.cards.toSpliced(newCardIndex, 0, {
           ...activeDraggingCardData,
           columnId: nextOverColumn._id,
         });
+
+        nextOverColumn.cards = nextOverColumn.cards.filter((card) => !card.FE_PlaceholderCard);
+
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map((card) => card._id);
       }
 
