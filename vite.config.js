@@ -9,8 +9,8 @@ export default defineConfig({
   resolve: {
     alias: [{ find: '~', replacement: '/src' }],
   },
-  server: {
-    open: true,
-    port: 5173,
-  },
+  // server: {
+  //   open: true,
+  //   port: 5173,
+  // },
 });
