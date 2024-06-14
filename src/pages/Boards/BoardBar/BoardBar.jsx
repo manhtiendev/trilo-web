@@ -38,17 +38,13 @@ function BoardBar({ board }) {
         gap: 2,
         px: 2,
         overflowX: 'auto',
-        bgcolor: (theme) =>
-          theme.palette.mode === 'dark' ? '#34495e' : '#1976d2',
+        bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'),
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <Chip
-          sx={MENU_STYLES}
-          icon={<DashboardIcon />}
-          label={board?.title}
-          onClick={() => {}}
-        />
+        <Tooltip title={board?.description}>
+          <Chip sx={MENU_STYLES} icon={<DashboardIcon />} label={board?.title} onClick={() => {}} />
+        </Tooltip>
         <Chip
           sx={MENU_STYLES}
           icon={<VpnLockIcon />}
@@ -61,18 +57,8 @@ function BoardBar({ board }) {
           label='Add To Google Drive'
           onClick={() => {}}
         />
-        <Chip
-          sx={MENU_STYLES}
-          icon={<BoltIcon />}
-          label='Automation'
-          onClick={() => {}}
-        />
-        <Chip
-          sx={MENU_STYLES}
-          icon={<FilterListIcon />}
-          label='Filters'
-          onClick={() => {}}
-        />
+        <Chip sx={MENU_STYLES} icon={<BoltIcon />} label='Automation' onClick={() => {}} />
+        <Chip sx={MENU_STYLES} icon={<FilterListIcon />} label='Filters' onClick={() => {}} />
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
         <Button
@@ -106,10 +92,7 @@ function BoardBar({ board }) {
           }}
         >
           <Tooltip title='Mạnh Tiến'>
-            <Avatar
-              alt='Mạnh Tiến'
-              src='https://i.ibb.co/PjCWvwT/t-i-xu-ng.jpg'
-            />
+            <Avatar alt='Mạnh Tiến' src='https://i.ibb.co/PjCWvwT/t-i-xu-ng.jpg' />
           </Tooltip>
           <Tooltip title='Linh Cim'>
             <Avatar
@@ -136,16 +119,10 @@ function BoardBar({ board }) {
             />
           </Tooltip>
           <Tooltip title='Members'>
-            <Avatar
-              alt='Mạnh Tiến'
-              src='https://i.ibb.co/PjCWvwT/t-i-xu-ng.jpg'
-            />
+            <Avatar alt='Mạnh Tiến' src='https://i.ibb.co/PjCWvwT/t-i-xu-ng.jpg' />
           </Tooltip>
           <Tooltip title='Members'>
-            <Avatar
-              alt='Mạnh Tiến'
-              src='https://i.ibb.co/PjCWvwT/t-i-xu-ng.jpg'
-            />
+            <Avatar alt='Mạnh Tiến' src='https://i.ibb.co/PjCWvwT/t-i-xu-ng.jpg' />
           </Tooltip>
         </AvatarGroup>
       </Box>
