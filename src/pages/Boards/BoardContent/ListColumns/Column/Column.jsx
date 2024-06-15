@@ -200,6 +200,7 @@ function Column({ column }) {
                 size="small"
                 variant="outlined"
                 autoFocus
+                data-no-dnd="true"
                 value={newCardTitle}
                 onChange={(e) => {
                   setNewCardTitle(e.target.value);
@@ -235,6 +236,7 @@ function Column({ column }) {
                 }}
               >
                 <Button
+                  data-no-dnd="true"
                   onClick={addNewCard}
                   variant="contained"
                   color="success"
@@ -249,6 +251,7 @@ function Column({ column }) {
                   Add
                 </Button>
                 <CloseIcon
+                  data-no-dnd="true"
                   fontSize="small"
                   sx={{
                     color: (theme) => theme.palette.success.main,
