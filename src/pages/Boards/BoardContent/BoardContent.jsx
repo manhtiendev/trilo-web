@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import Box from '@mui/material/Box';
-import ListColumns from './ListColumns/ListColumns';
-import { mapOrder } from '~/utils/sorts';
+import { useCallback, useEffect, useRef, useState } from "react";
+import Box from "@mui/material/Box";
+import ListColumns from "./ListColumns/ListColumns";
+import { mapOrder } from "~/utils/sorts";
 import {
   DndContext,
   // PointerSensor,
@@ -14,17 +14,17 @@ import {
   closestCorners,
   pointerWithin,
   getFirstCollision,
-} from '@dnd-kit/core';
-import { arrayMove } from '~/utils/arrayMove';
-import Column from './ListColumns/Column/Column';
-import Card from './ListColumns/Column/ListCards/Card/Card';
-import { cloneDeep, isEmpty } from 'lodash';
-import { generatePlaceholderCard } from '~/utils/formatters';
+} from "@dnd-kit/core";
+import { arrayMove } from "~/utils/arrayMove";
+import Column from "./ListColumns/Column/Column";
+import Card from "./ListColumns/Column/ListCards/Card/Card";
+import { cloneDeep, isEmpty } from "lodash";
+import { generatePlaceholderCard } from "~/utils/formatters";
 // import { arrayMove } from '@dnd-kit/sortable';
 
 const ACTIVE_DRAG_ITEM_TYPE = {
-  COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
-  CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD',
+  COLUMN: "ACTIVE_DRAG_ITEM_TYPE_COLUMN",
+  CARD: "ACTIVE_DRAG_ITEM_TYPE_CARD",
 };
 
 export default function BoardContent({ board }) {
@@ -38,7 +38,7 @@ export default function BoardContent({ board }) {
   const lastOverId = useRef(null);
 
   useEffect(() => {
-    setorderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'));
+    setorderedColumns(mapOrder(board?.columns, board?.columnOrderIds, "_id"));
   }, [board]);
 
   //Fix drop column animation
@@ -255,7 +255,7 @@ export default function BoardContent({ board }) {
       const pointerIntersections = pointerWithin(args);
       if (!pointerIntersections?.length) return;
 
-      let overId = getFirstCollision(pointerIntersections, 'id');
+      let overId = getFirstCollision(pointerIntersections, "id");
       if (overId) {
         const checkColumn = orderedColumns.find((col) => col._id === overId);
         if (checkColumn) {
@@ -288,10 +288,10 @@ export default function BoardContent({ board }) {
     >
       <Box
         sx={{
-          bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'),
-          width: '100%',
+          bgcolor: (theme) => (theme.palette.mode === "dark" ? "#34495e" : "#1976d2"),
+          width: "100%",
           height: (theme) => theme.custom.boardContentHeight,
-          p: '10px 0',
+          p: "10px 0",
         }}
       >
         <ListColumns columns={orderedColumns} />
