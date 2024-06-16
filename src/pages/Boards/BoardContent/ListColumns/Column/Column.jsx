@@ -22,6 +22,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
+import { toast } from "react-toastify";
 
 function Column({ column }) {
   const [openNewCard, setOpenNewCard] = useState(false);
@@ -58,7 +59,14 @@ function Column({ column }) {
   };
 
   const addNewCard = () => {
-    if (!newCardTitle) return;
+    if (!newCardTitle) {
+      toast.error("Please enter Card Title!", {
+        position: "bottom-right",
+        theme: "colored",
+        autoClose: 2000,
+      });
+      return;
+    }
     // Call API
 
     toggleOpenNewCard();
@@ -191,6 +199,7 @@ function Column({ column }) {
                 height: "100%",
                 display: "flex",
                 alignItems: "center",
+                transition: "0.5s",
                 gap: 1,
               }}
             >
@@ -235,32 +244,36 @@ function Column({ column }) {
                   gap: 1,
                 }}
               >
-                <Button
-                  data-no-dnd="true"
-                  onClick={addNewCard}
-                  variant="contained"
-                  color="success"
-                  size="small"
-                  sx={{
-                    boxShadow: "none",
-                    border: "0.5px solid",
-                    borderColor: (theme) => theme.palette.success.main,
-                    "&:hover": { bgcolor: (theme) => theme.palette.success.main },
-                  }}
-                >
-                  Add
-                </Button>
-                <CloseIcon
-                  data-no-dnd="true"
-                  fontSize="small"
-                  sx={{
-                    color: (theme) => theme.palette.success.main,
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    toggleOpenNewCard();
-                  }}
-                />
+                <Tooltip title="Add new card">
+                  <Button
+                    data-no-dnd="true"
+                    onClick={addNewCard}
+                    variant="contained"
+                    color="success"
+                    size="small"
+                    sx={{
+                      boxShadow: "none",
+                      border: "0.5px solid",
+                      borderColor: (theme) => theme.palette.success.main,
+                      "&:hover": { bgcolor: (theme) => theme.palette.success.main },
+                    }}
+                  >
+                    Add
+                  </Button>
+                </Tooltip>
+                <Tooltip title="Close">
+                  <CloseIcon
+                    data-no-dnd="true"
+                    fontSize="small"
+                    sx={{
+                      color: (theme) => theme.palette.success.main,
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      toggleOpenNewCard();
+                    }}
+                  />
+                </Tooltip>
               </Box>
             </Box>
           )}
