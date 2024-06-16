@@ -6,6 +6,8 @@ import { SortableContext, horizontalListSortingStrategy } from "@dnd-kit/sortabl
 import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
+import { Tooltip } from "@mui/material";
+import { toast } from "react-toastify";
 
 function ListColumns({ columns }) {
   const [openNewColumn, setOpenNewColumn] = useState(false);
@@ -15,7 +17,14 @@ function ListColumns({ columns }) {
   };
 
   const addNewColumn = () => {
-    if (!newColumnTitle) return;
+    if (!newColumnTitle) {
+      toast.error("Please enter Column Title!", {
+        position: "bottom-left",
+        theme: "colored",
+        autoClose: 2000,
+      });
+      return;
+    }
     // Call API
 
     toggleOpenNewColumn();
@@ -124,33 +133,37 @@ function ListColumns({ columns }) {
                 gap: 1,
               }}
             >
-              <Button
-                onClick={addNewColumn}
-                variant="contained"
-                color="success"
-                size="small"
-                sx={{
-                  boxShadow: "none",
-                  border: "0.5px solid",
-                  borderColor: (theme) => theme.palette.success.main,
-                  "&:hover": { bgcolor: (theme) => theme.palette.success.main },
-                }}
-              >
-                Add Column
-              </Button>
-              <CloseIcon
-                fontSize="small"
-                sx={{
-                  color: "white",
-                  cursor: "pointer",
-                  "&:hover": {
-                    color: (theme) => theme.palette.success.main,
-                  },
-                }}
-                onClick={() => {
-                  toggleOpenNewColumn();
-                }}
-              />
+              <Tooltip title="Add new column">
+                <Button
+                  onClick={addNewColumn}
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  sx={{
+                    boxShadow: "none",
+                    border: "0.5px solid",
+                    borderColor: (theme) => theme.palette.success.main,
+                    "&:hover": { bgcolor: (theme) => theme.palette.success.main },
+                  }}
+                >
+                  Add Column
+                </Button>
+              </Tooltip>
+              <Tooltip title="Close">
+                <CloseIcon
+                  fontSize="small"
+                  sx={{
+                    color: "white",
+                    cursor: "pointer",
+                    "&:hover": {
+                      color: (theme) => theme.palette.success.main,
+                    },
+                  }}
+                  onClick={() => {
+                    toggleOpenNewColumn();
+                  }}
+                />
+              </Tooltip>
             </Box>
           </Box>
         )}
