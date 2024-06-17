@@ -28,7 +28,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: "ACTIVE_DRAG_ITEM_TYPE_CARD",
 };
 
-export default function BoardContent({ board, createNewColumn, createNewCard }) {
+export default function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
   const [orderedColumns, setorderedColumns] = useState([]);
 
   const [activeDragItemId, setActiveDragItemId] = useState(null);
@@ -204,6 +204,8 @@ export default function BoardContent({ board, createNewColumn, createNewCard }) 
       if (active.id !== over.id) {
         const oldIndex = orderedColumns.findIndex((c) => c._id === active.id);
         const newIndex = orderedColumns.findIndex((c) => c._id === over.id);
+
+        moveColumn(arrayMove(orderedColumns, oldIndex, newIndex));
 
         setorderedColumns(arrayMove(orderedColumns, oldIndex, newIndex));
       }

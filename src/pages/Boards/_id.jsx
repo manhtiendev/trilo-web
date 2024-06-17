@@ -4,8 +4,13 @@ import BoardContent from "./BoardContent/BoardContent";
 import BoardBar from "./BoardBar/BoardBar";
 import AppBar from "~/components/AppBar/AppBar";
 // import { mockData } from "~/apis/mock-data";
-import { createNewCardAPI, createNewColumnAPI, fetchBoardDetailsAPI } from "~/apis";
-import { isEmpty } from "lodash";
+import {
+  createNewCardAPI,
+  createNewColumnAPI,
+  fetchBoardDetailsAPI,
+  updateBoardDetailsAPI,
+} from "~/apis";
+import { cloneDeep, isEmpty } from "lodash";
 import { generatePlaceholderCard } from "~/utils/formatters";
 
 function Board() {
@@ -48,11 +53,29 @@ function Board() {
     setBoard(newBoard);
   };
 
+  const moveColumn = async (dndOderedColumns) => {
+    const dndOderedColumnsIds = dndOderedColumns.map((c) => c._id);
+
+    const newBoard = cloneDeep(board);
+    newBoard.columns = dndOderedColumns;
+    newBoard.columnOrderIds = dndOderedColumnsIds;
+    setBoard(newBoard);
+
+    await updateBoardDetailsAPI(newBoard._id, {
+      columnOrderIds: dndOderedColumnsIds,
+    });
+  };
+
   return (
     <Container maxWidth={false} disableGutters sx={{ height: "100vh" }}>
       <AppBar />
       <BoardBar board={board} />
-      <BoardContent board={board} createNewColumn={createNewColumn} createNewCard={createNewCard} />
+      <BoardContent
+        board={board}
+        createNewColumn={createNewColumn}
+        createNewCard={createNewCard}
+        moveColumn={moveColumn}
+      />
     </Container>
   );
 }
