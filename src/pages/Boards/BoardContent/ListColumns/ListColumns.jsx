@@ -9,14 +9,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Tooltip } from "@mui/material";
 import { toast } from "react-toastify";
 
-function ListColumns({ columns }) {
+function ListColumns({ columns, createNewColumn, createNewCard }) {
   const [openNewColumn, setOpenNewColumn] = useState(false);
   const [newColumnTitle, setNewColumnTitle] = useState("");
   const toggleOpenNewColumn = () => {
     setOpenNewColumn(!openNewColumn);
   };
 
-  const addNewColumn = () => {
+  const addNewColumn = async () => {
     if (!newColumnTitle) {
       toast.error("Please enter Column Title!", {
         position: "bottom-left",
@@ -25,7 +25,12 @@ function ListColumns({ columns }) {
       });
       return;
     }
+
     // Call API
+    const newColumnData = {
+      title: newColumnTitle,
+    };
+    await createNewColumn(newColumnData);
 
     toggleOpenNewColumn();
     setNewColumnTitle("");
@@ -50,7 +55,7 @@ function ListColumns({ columns }) {
         }}
       >
         {columns?.map((column) => (
-          <Column key={column._id} column={column} />
+          <Column key={column._id} column={column} createNewCard={createNewCard} />
         ))}
 
         {/* Button Add Column */}
