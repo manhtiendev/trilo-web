@@ -9,9 +9,14 @@ import {
   createNewColumnAPI,
   fetchBoardDetailsAPI,
   updateBoardDetailsAPI,
+  updateColumnDetailsAPI,
 } from "~/apis";
 import { cloneDeep, isEmpty } from "lodash";
 import { generatePlaceholderCard } from "~/utils/formatters";
+import { mapOrder } from "~/utils/sorts";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
 
 function Board() {
   const [board, setBoard] = useState(null);
@@ -19,10 +24,14 @@ function Board() {
   useEffect(() => {
     const boardId = "666ba007b0ebd181ae47ac6a";
     fetchBoardDetailsAPI(boardId).then((board) => {
+      board.columns = mapOrder(board.columns, board.columnOrderIds, "_id");
+
       board.columns.forEach((col) => {
         if (isEmpty(col.cards)) {
           col.cards = [generatePlaceholderCard(col)];
           col.cardOrderIds = [generatePlaceholderCard(col)._id];
+        } else {
+          col.cards = mapOrder(col.cards, col.cardOrderIds, "_id");
         }
       });
       setBoard(board);
@@ -53,7 +62,7 @@ function Board() {
     setBoard(newBoard);
   };
 
-  const moveColumn = async (dndOderedColumns) => {
+  const moveColumn = (dndOderedColumns) => {
     const dndOderedColumnsIds = dndOderedColumns.map((c) => c._id);
 
     const newBoard = cloneDeep(board);
@@ -61,10 +70,42 @@ function Board() {
     newBoard.columnOrderIds = dndOderedColumnsIds;
     setBoard(newBoard);
 
-    await updateBoardDetailsAPI(newBoard._id, {
+    updateBoardDetailsAPI(newBoard._id, {
       columnOrderIds: dndOderedColumnsIds,
     });
   };
+
+  const moveCardInColumn = (dndOderedCards, dndOderedCardIds, columnId) => {
+    const newBoard = cloneDeep(board);
+    const columnDnd = newBoard.columns.find((col) => col._id === columnId);
+    if (columnDnd) {
+      columnDnd.cards = dndOderedCards;
+      columnDnd.cardOrderIds = dndOderedCardIds;
+    }
+    setBoard(newBoard);
+
+    updateColumnDetailsAPI(columnId, {
+      cardOrderIds: dndOderedCardIds,
+    });
+  };
+
+  if (!board) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 2,
+          width: "100vw",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress></CircularProgress>
+        <Typography>Loading board...</Typography>
+      </Box>
+    );
+  }
 
   return (
     <Container maxWidth={false} disableGutters sx={{ height: "100vh" }}>
@@ -75,6 +116,7 @@ function Board() {
         createNewColumn={createNewColumn}
         createNewCard={createNewCard}
         moveColumn={moveColumn}
+        moveCardInColumn={moveCardInColumn}
       />
     </Container>
   );

@@ -30,7 +30,7 @@ function ListColumns({ columns, createNewColumn, createNewCard }) {
     const newColumnData = {
       title: newColumnTitle,
     };
-    await createNewColumn(newColumnData);
+    createNewColumn(newColumnData);
 
     toggleOpenNewColumn();
     setNewColumnTitle("");

@@ -17,7 +17,6 @@ import AddCardIcon from "@mui/icons-material/AddCard";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import ContentPaste from "@mui/icons-material/ContentPaste";
 import ListCards from "./ListCards/ListCards";
-import { mapOrder } from "~/utils/sorts";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import TextField from "@mui/material/TextField";
@@ -38,7 +37,7 @@ function Column({ column, createNewCard }) {
   };
 
   // Sort
-  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, "_id");
+  const orderedCards = column.cards;
 
   // Dnd
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -72,7 +71,7 @@ function Column({ column, createNewCard }) {
       title: newCardTitle,
       columnId: column._id,
     };
-    await createNewCard(newCardData);
+    createNewCard(newCardData);
 
     toggleOpenNewCard();
     setNewCardTitle("");
