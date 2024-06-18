@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import ListColumns from "./ListColumns/ListColumns";
-import { mapOrder } from "~/utils/sorts";
 import {
   DndContext,
   // PointerSensor,
@@ -28,7 +27,13 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: "ACTIVE_DRAG_ITEM_TYPE_CARD",
 };
 
-export default function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
+export default function BoardContent({
+  board,
+  createNewColumn,
+  createNewCard,
+  moveColumn,
+  moveCardInColumn,
+}) {
   const [orderedColumns, setorderedColumns] = useState([]);
 
   const [activeDragItemId, setActiveDragItemId] = useState(null);
@@ -39,7 +44,7 @@ export default function BoardContent({ board, createNewColumn, createNewCard, mo
   const lastOverId = useRef(null);
 
   useEffect(() => {
-    setorderedColumns(mapOrder(board?.columns, board?.columnOrderIds, "_id"));
+    setorderedColumns(board.columns);
   }, [board]);
 
   //Fix drop column animation
@@ -187,16 +192,19 @@ export default function BoardContent({ board, createNewColumn, createNewCard, mo
         const oldIndex = oldColumn?.cards?.findIndex((c) => c._id === activeDragItemId);
         const newIndex = overColumn?.cards?.findIndex((c) => c._id === overCardId);
 
+        const dndOderedCards = arrayMove(oldColumn?.cards, oldIndex, newIndex);
+        const dndOderedCardIds = dndOderedCards.map((c) => c._id);
+
         setorderedColumns((prevColumns) => {
           const nextColumns = cloneDeep(prevColumns);
           const targetColumn = nextColumns.find((c) => c._id === overColumn._id);
-          targetColumn.cards = arrayMove(oldColumn?.cards, oldIndex, newIndex);
-          targetColumn.cardOrderIds = arrayMove(oldColumn?.cards, oldIndex, newIndex).map(
-            (c) => c._id
-          );
+          targetColumn.cards = dndOderedCards;
+          targetColumn.cardOrderIds = dndOderedCardIds;
 
           return nextColumns;
         });
+
+        moveCardInColumn(dndOderedCards, dndOderedCardIds, oldColumn._id);
       }
     }
 
@@ -205,9 +213,9 @@ export default function BoardContent({ board, createNewColumn, createNewCard, mo
         const oldIndex = orderedColumns.findIndex((c) => c._id === active.id);
         const newIndex = orderedColumns.findIndex((c) => c._id === over.id);
 
-        moveColumn(arrayMove(orderedColumns, oldIndex, newIndex));
-
         setorderedColumns(arrayMove(orderedColumns, oldIndex, newIndex));
+
+        moveColumn(arrayMove(orderedColumns, oldIndex, newIndex));
       }
     }
 
