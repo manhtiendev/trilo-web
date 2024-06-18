@@ -1,37 +1,38 @@
-import { useEffect, useState } from "react";
-import Container from "@mui/material/Container";
-import BoardContent from "./BoardContent/BoardContent";
-import BoardBar from "./BoardBar/BoardBar";
-import AppBar from "~/components/AppBar/AppBar";
+import { useEffect, useState } from 'react';
+import Container from '@mui/material/Container';
+import BoardContent from './BoardContent/BoardContent';
+import BoardBar from './BoardBar/BoardBar';
+import AppBar from '~/components/AppBar/AppBar';
 // import { mockData } from "~/apis/mock-data";
 import {
   createNewCardAPI,
   createNewColumnAPI,
   fetchBoardDetailsAPI,
+  moveCardOtherColumnAPI,
   updateBoardDetailsAPI,
   updateColumnDetailsAPI,
-} from "~/apis";
-import { cloneDeep, isEmpty } from "lodash";
-import { generatePlaceholderCard } from "~/utils/formatters";
-import { mapOrder } from "~/utils/sorts";
-import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
-import Typography from "@mui/material/Typography";
+} from '~/apis';
+import { cloneDeep, isEmpty } from 'lodash';
+import { generatePlaceholderCard } from '~/utils/formatters';
+import { mapOrder } from '~/utils/sorts';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
 
 function Board() {
   const [board, setBoard] = useState(null);
 
   useEffect(() => {
-    const boardId = "666ba007b0ebd181ae47ac6a";
+    const boardId = '666ba007b0ebd181ae47ac6a';
     fetchBoardDetailsAPI(boardId).then((board) => {
-      board.columns = mapOrder(board.columns, board.columnOrderIds, "_id");
+      board.columns = mapOrder(board.columns, board.columnOrderIds, '_id');
 
       board.columns.forEach((col) => {
         if (isEmpty(col.cards)) {
           col.cards = [generatePlaceholderCard(col)];
           col.cardOrderIds = [generatePlaceholderCard(col)._id];
         } else {
-          col.cards = mapOrder(col.cards, col.cardOrderIds, "_id");
+          col.cards = mapOrder(col.cards, col.cardOrderIds, '_id');
         }
       });
       setBoard(board);
@@ -55,9 +56,15 @@ function Board() {
 
     const newBoard = { ...board };
     const colToUpdate = newBoard.columns.find((col) => col._id === createdCard.columnId);
+
     if (colToUpdate) {
-      colToUpdate.cards.push(createdCard);
-      colToUpdate.cardOrderIds.push(createdCard._id);
+      if (colToUpdate.cards.some((card) => card.FE_PlaceholderCard)) {
+        colToUpdate.cards = [createdCard];
+        colToUpdate.cardOrderIds = [createdCard._id];
+      } else {
+        colToUpdate.cards.push(createdCard);
+        colToUpdate.cardOrderIds.push(createdCard._id);
+      }
     }
     setBoard(newBoard);
   };
@@ -89,16 +96,36 @@ function Board() {
     });
   };
 
+  const moveCardOtherColumn = (currentCardId, prevColumnId, nextColumnId, dndOderedColumns) => {
+    const dndOderedColumnsIds = dndOderedColumns.map((c) => c._id);
+
+    const newBoard = cloneDeep(board);
+    newBoard.columns = dndOderedColumns;
+    newBoard.columnOrderIds = dndOderedColumnsIds;
+    setBoard(newBoard);
+
+    let prevCardOrderIds = dndOderedColumns.find((c) => c._id === prevColumnId)?.cardOrderIds;
+    if (prevCardOrderIds[0].includes('placeholder-card')) prevCardOrderIds = [];
+
+    moveCardOtherColumnAPI({
+      currentCardId,
+      prevColumnId,
+      prevCardOrderIds,
+      nextColumnId,
+      nextCardOrderIds: dndOderedColumns.find((c) => c._id === nextColumnId)?.cardOrderIds,
+    });
+  };
+
   if (!board) {
     return (
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           gap: 2,
-          width: "100vw",
-          height: "100vh",
+          width: '100vw',
+          height: '100vh',
         }}
       >
         <CircularProgress></CircularProgress>
@@ -108,7 +135,7 @@ function Board() {
   }
 
   return (
-    <Container maxWidth={false} disableGutters sx={{ height: "100vh" }}>
+    <Container maxWidth={false} disableGutters sx={{ height: '100vh' }}>
       <AppBar />
       <BoardBar board={board} />
       <BoardContent
@@ -117,6 +144,7 @@ function Board() {
         createNewCard={createNewCard}
         moveColumn={moveColumn}
         moveCardInColumn={moveCardInColumn}
+        moveCardOtherColumn={moveCardOtherColumn}
       />
     </Container>
   );

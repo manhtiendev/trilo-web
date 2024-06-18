@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import Box from "@mui/material/Box";
-import ListColumns from "./ListColumns/ListColumns";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import Box from '@mui/material/Box';
+import ListColumns from './ListColumns/ListColumns';
 import {
   DndContext,
   // PointerSensor,
@@ -13,18 +13,18 @@ import {
   closestCorners,
   pointerWithin,
   getFirstCollision,
-} from "@dnd-kit/core";
-import { MouseSensor, TouchSensor } from "~/customLibs/DndKitSensors";
-import { arrayMove } from "~/utils/arrayMove";
-import Column from "./ListColumns/Column/Column";
-import Card from "./ListColumns/Column/ListCards/Card/Card";
-import { cloneDeep, isEmpty } from "lodash";
-import { generatePlaceholderCard } from "~/utils/formatters";
+} from '@dnd-kit/core';
+import { MouseSensor, TouchSensor } from '~/customLibs/DndKitSensors';
+import { arrayMove } from '~/utils/arrayMove';
+import Column from './ListColumns/Column/Column';
+import Card from './ListColumns/Column/ListCards/Card/Card';
+import { cloneDeep, isEmpty } from 'lodash';
+import { generatePlaceholderCard } from '~/utils/formatters';
 // import { arrayMove } from '@dnd-kit/sortable';
 
 const ACTIVE_DRAG_ITEM_TYPE = {
-  COLUMN: "ACTIVE_DRAG_ITEM_TYPE_COLUMN",
-  CARD: "ACTIVE_DRAG_ITEM_TYPE_CARD",
+  COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
+  CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD',
 };
 
 export default function BoardContent({
@@ -33,6 +33,7 @@ export default function BoardContent({
   createNewCard,
   moveColumn,
   moveCardInColumn,
+  moveCardOtherColumn,
 }) {
   const [orderedColumns, setorderedColumns] = useState([]);
 
@@ -69,7 +70,8 @@ export default function BoardContent({
     over,
     activeColumn,
     activeDraggingCardId,
-    activeDraggingCardData
+    activeDraggingCardData,
+    triggerFrom
   ) => {
     setorderedColumns((prevColumns) => {
       const overCardIndex = overColumn?.cards?.findIndex((card) => card._id === overCardId);
@@ -111,6 +113,10 @@ export default function BoardContent({
         nextOverColumn.cards = nextOverColumn.cards.filter((card) => !card.FE_PlaceholderCard);
 
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map((card) => card._id);
+      }
+
+      if (triggerFrom === 'handleDragEnd') {
+        moveCardOtherColumn(activeDraggingCardId, oldColumn._id, nextOverColumn._id, nextColumns);
       }
 
       return nextColumns;
@@ -155,7 +161,8 @@ export default function BoardContent({
         over,
         activeColumn,
         activeDraggingCardId,
-        activeDraggingCardData
+        activeDraggingCardData,
+        'handleDragOver'
       );
     }
   };
@@ -185,7 +192,8 @@ export default function BoardContent({
           over,
           activeColumn,
           activeDraggingCardId,
-          activeDraggingCardData
+          activeDraggingCardData,
+          'handleDragEnd'
         );
       } else {
         // Dnd card in Column
@@ -266,7 +274,7 @@ export default function BoardContent({
       const pointerIntersections = pointerWithin(args);
       if (!pointerIntersections?.length) return;
 
-      let overId = getFirstCollision(pointerIntersections, "id");
+      let overId = getFirstCollision(pointerIntersections, 'id');
       if (overId) {
         const checkColumn = orderedColumns.find((col) => col._id === overId);
         if (checkColumn) {
@@ -299,10 +307,10 @@ export default function BoardContent({
     >
       <Box
         sx={{
-          bgcolor: (theme) => (theme.palette.mode === "dark" ? "#34495e" : "#1976d2"),
-          width: "100%",
+          bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'),
+          width: '100%',
           height: (theme) => theme.custom.boardContentHeight,
-          p: "10px 0",
+          p: '10px 0',
         }}
       >
         <ListColumns
