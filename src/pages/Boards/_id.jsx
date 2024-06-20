@@ -7,6 +7,7 @@ import AppBar from '~/components/AppBar/AppBar';
 import {
   createNewCardAPI,
   createNewColumnAPI,
+  deleteColumnDetailsAPI,
   fetchBoardDetailsAPI,
   moveCardOtherColumnAPI,
   updateBoardDetailsAPI,
@@ -18,6 +19,7 @@ import { mapOrder } from '~/utils/sorts';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
+import { toast } from 'react-toastify';
 
 function Board() {
   const [board, setBoard] = useState(null);
@@ -116,6 +118,21 @@ function Board() {
     });
   };
 
+  const deleteColumn = (columnId) => {
+    const newBoard = cloneDeep(board);
+    newBoard.columns = newBoard.columns.filter((col) => col._id !== columnId);
+    newBoard.columnOrderIds = newBoard.columnOrderIds.filter((_id) => _id !== columnId);
+    setBoard(newBoard);
+
+    deleteColumnDetailsAPI(columnId).then((res) => {
+      toast.success(res?.deleteResult, {
+        position: 'bottom-left',
+        theme: 'colored',
+        autoClose: 2000,
+      });
+    });
+  };
+
   if (!board) {
     return (
       <Box
@@ -145,6 +162,7 @@ function Board() {
         moveColumn={moveColumn}
         moveCardInColumn={moveCardInColumn}
         moveCardOtherColumn={moveCardOtherColumn}
+        deleteColumn={deleteColumn}
       />
     </Container>
   );

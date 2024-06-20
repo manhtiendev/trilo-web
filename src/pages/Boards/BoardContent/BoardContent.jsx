@@ -34,6 +34,7 @@ export default function BoardContent({
   moveColumn,
   moveCardInColumn,
   moveCardOtherColumn,
+  deleteColumn,
 }) {
   const [orderedColumns, setorderedColumns] = useState([]);
 
@@ -317,6 +318,7 @@ export default function BoardContent({
           columns={orderedColumns}
           createNewColumn={createNewColumn}
           createNewCard={createNewCard}
+          deleteColumn={deleteColumn}
         />
         <DragOverlay dropAnimation={dropAnimation}>
           {!activeDragItemType && null}
