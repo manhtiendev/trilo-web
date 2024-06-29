@@ -8,7 +8,7 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness';
 import Box from '@mui/material/Box';
 
-function ModeSelect() {
+function ModeSelect({ className = '' }) {
   const { mode, setMode } = useColorScheme();
 
   const handleChange = (e) => {
@@ -17,7 +17,7 @@ function ModeSelect() {
   };
 
   return (
-    <FormControl sx={{ minWidth: 126 }} size='small'>
+    <FormControl className={className} sx={{ minWidth: 126 }} size='small'>
       <InputLabel
         id='label-select-dark-light-mode'
         sx={{ color: 'white', '&.Mui-focused': { color: 'white' } }}
